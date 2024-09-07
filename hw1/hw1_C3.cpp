@@ -15,7 +15,6 @@ bool non_convex(stack<Point> &hull, Point &next) {
 
 int main() {
     size_t n, index = 1;
-    long long x_ref, y_ref;
     cin >> n;
     vector<Point> points(n);
     for (auto &point : points) {
@@ -24,7 +23,7 @@ int main() {
     }
 
     // choose reference point
-    tie(x_ref, y_ref, ignore) =
+    auto [x_ref, y_ref, ignore] =
         *min_element(points.begin(), points.end(), [](const auto &a, const auto &b) {
             if (get<0>(a) == get<0>(b)) return get<1>(a) < get<1>(b);
             return get<0>(a) < get<0>(b);
