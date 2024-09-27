@@ -12,7 +12,6 @@ struct TreeNode {
 
 auto build_tree(size_t, const vector<int> &, const vector<size_t> &) -> TreeNode *; // build tree based on the array
 auto search(TreeNode *, size_t &) -> unordered_set<int> *; // find the number of special segments of the root
-vector<TreeNode *> node_pos;
 
 int main() {
     // initialize
@@ -33,7 +32,7 @@ int main() {
 auto build_tree(size_t n, const vector<int> &nums, const vector<size_t> &pos) -> TreeNode * {
     // O(n)
     vector<int> left_side(n), right_side(n);
-    node_pos.resize(n);
+    vector<TreeNode *> node_pos(n);
     stack<int> monotonic;
 
     // left
@@ -54,9 +53,9 @@ auto build_tree(size_t n, const vector<int> &nums, const vector<size_t> &pos) ->
     // start building tree
     node_pos.back() = new TreeNode(static_cast<int>(n));
     for (size_t i = n - 1; i >= 1; i--)
-        (left_side[pos[i - 1]] < right_side[pos[i - 1]] ? node_pos[left_side[pos[i - 1]] - 1]->right
-                                                        : node_pos[right_side[pos[i - 1]] - 1]->left) =
-            new TreeNode(static_cast<int>(i));
+        node_pos[i - 1] = (left_side[pos[i - 1]] < right_side[pos[i - 1]]
+                               ? node_pos[left_side[pos[i - 1]] - 1]->right
+                               : node_pos[right_side[pos[i - 1]] - 1]->left) = new TreeNode(static_cast<int>(i));
 
     return node_pos.back();
 }
