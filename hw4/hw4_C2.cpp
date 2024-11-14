@@ -2,13 +2,13 @@
 #include <ranges>
 using namespace std;
 
-using Event = tuple<int, int, int>; // start, end, point
+using Event = tuple<int, int, long long>; // start, end, point
 
 vector<Event> events;
 vector<size_t> previous;
-vector<int> dp;
+vector<long long> dp;
 
-auto get_optimal(size_t) -> int;
+auto get_optimal(size_t) -> long long;
 
 int main() {
     // read input
@@ -34,7 +34,6 @@ int main() {
 
     // dp
     dp.resize(n, 0);
-    dp.front() = get<2>(events.front());
     for (size_t i = n - 1; i < n; i--) {
         auto [s, e, p] = events[i];
         dp[i] = max(get_optimal(i - 1), get_optimal(previous[i]) + p);
@@ -43,8 +42,9 @@ int main() {
     cout << dp.back() << endl;
 }
 
-auto get_optimal(size_t i) -> int {
+auto get_optimal(size_t i) -> long long {
+    if (i >= dp.size()) return 0;
     if (dp[i]) return dp[i];
     auto &point = get<2>(events[i]);
-    return dp[i] = (i < dp.size() ? max(get_optimal(i - 1), get_optimal(previous[i]) + point) : point);
+    return (dp[i] = max(get_optimal(i - 1), get_optimal(previous[i]) + point));
 }
